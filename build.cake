@@ -11,16 +11,66 @@ var xamarinSolution = File("../src/UI/Xamarin/ShipFly.Forms/ShipFly.Forms.sln");
 var androidProject = File("../src/UI/Xamarin/ShipFly.Forms/Droid/ShipFly.Forms.Droid.csproj");
 var androidPackage = File(string.Format("../src/UI/Xamarin/ShipFly.Forms/Droid/bin/{0}/com.shipfly.shipfly.apk", configuration));
 var iOSPackage = File(string.Format("../src/UI/Xamarin/ShipFly.Forms/iOS/bin/iPhone/{0}/ShipFly.ipa", configuration));
+var travisci = TravisCI;
 
 Setup(() => 
 {
-    Information("Hello Cake and Bitrise");
+    Information("Hello Cake");
+    Information("Is Travis CI Build: {0}", TravisCI.IsRunningOnTravisCI);
 });
 
 Teardown(() =>
 {
-    Information("Later Cake and Bitrise");
+    Information("Later Cake");
 });
 
-Task("Default");
+Task("Nuget-Restore")
+.Does(() =>
+{
+	    NuGetRestore("./src/MobileWorld.sln", new NuGetRestoreSettings {
+        Source = new List<string> {
+            "https://www.myget.org/F/rlittlesii-cake/api/v2"
+        }
+    });
+});
+
+Task("Travis-Test")
+.Does(() =>
+{
+	if(TravisCI.IsRunningOnTravisCI)
+	{
+		Information("{0}: {1}", "CI" , TravisCI.Environment.CI);
+		Information("{0}: {1}", "Home" , TravisCI.Environment.Home);
+//		Information("{0}: {1}", "" , TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+//		Information("{0}: {1}", "", TravisCI.);
+	}
+});
+
+Task("Fold")
+.Does(() => 
+{
+	if(TravisCI.IsRunningOnTravisCI)
+	{
+		//TravisCI.Fold("GIT PULL");
+	}
+});
+
+
+Task("Default")
+.IsDependentOn("Travis-Test");
+
 RunTarget(target);
