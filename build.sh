@@ -58,7 +58,7 @@ fi
 
 # Restore tools from NuGet.
 pushd "$TOOLS_DIR" >/dev/null
-mono "$NUGET_EXE" install -ExcludeVersion
+mono "$NUGET_EXE" install -ExcludeVersion -Source https://www.myget.org/F/rlittlesii-cake/api/v2/package
 if [ $? -ne 0 ]; then
     echo "Could not restore NuGet packages."
     exit 1

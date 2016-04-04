@@ -61,16 +61,19 @@ Task("Travis-Test")
 });
 
 Task("Fold")
-.Does(() => 
+.IsDependentOn("Travis-Test")
+.Does(() =>
 {
 	if(TravisCI.IsRunningOnTravisCI)
 	{
-		//TravisCI.Fold("GIT PULL");
+		TravisCI.WriteStartFold("name");
+		Information("Folded");
+		TravisCI.WriteEndFold("name");
 	}
 });
 
 
 Task("Default")
-.IsDependentOn("Travis-Test");
+.IsDependentOn("Fold");
 
 RunTarget(target);

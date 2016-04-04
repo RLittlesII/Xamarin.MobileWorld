@@ -16,7 +16,7 @@ Param(
 $PSScriptRoot = split-path -parent $MyInvocation.MyCommand.Definition;
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
 $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
-$CAKE_EXE = Join-Path $TOOLS_DIR "Cake.0.10.1-GH742-0001/Cake.exe"
+$CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
 $NUGET_URL = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 # Should we use experimental build of Roslyn?
@@ -52,7 +52,7 @@ if(-Not $SkipToolPackageRestore.IsPresent)
 {
     Push-Location
     Set-Location $TOOLS_DIR
-    Invoke-Expression "$NUGET_EXE install -Source https://www.myget.org/F/rlittlesii-cake/api/v2/package"
+    Invoke-Expression "$NUGET_EXE install -ExcludeVersion -Source https://www.myget.org/F/rlittlesii-cake/api/v2/package"
     Pop-Location
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
@@ -61,6 +61,7 @@ if(-Not $SkipToolPackageRestore.IsPresent)
 
 # Make sure that Cake has been installed.
 if (!(Test-Path $CAKE_EXE)) {
+Write-Host $CAKE_EXE
     Throw "Could not find Cake.exe"
 }
 
