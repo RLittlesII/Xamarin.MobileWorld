@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TARGETDIR">
+            <Directory Id="dirCFD54C07EFB094CAD317543172D62CC3" Name="bin" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCFD54C07EFB094CAD317543172D62CC3">
+            <Component Id="cmp1ED07BEF96F8E8F20E31D9CBA25CD6A4" Guid="PUT-GUID-HERE">
+                <File Id="fil324B557C15E2F1BB8E902275668A4EBC" KeyPath="yes" Source="SourceDir\bin\website.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+</Wix>
