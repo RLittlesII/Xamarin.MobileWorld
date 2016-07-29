@@ -69,26 +69,52 @@ Task("WiX-Directory")
 .IsDependentOn("Nuget-Restore")
 .Does(() =>
 {
-    DirectoryPath harvestDirectory = Directory("./");
+    var harvestDirectorySource = Directory("./src");
+    Information(harvestDirectorySource.GetType().Name);
+    var harvestDirectory = Directory("./");
+    Information(harvestDirectory.GetType().Name);
     var filePath = File("Wix.Directory.wxs");
-    var settings = new HeatSettings { HarvestType = WiXHarvestType.Dir };
     Information(MakeAbsolute(harvestDirectory).FullPath);
-    WiXHeat(harvestDirectory, filePath, settings);
+    //WiXHeat(harvestDirectory, filePath, WiXHarvestType.Dir);
+});
+
+Task("WiX-Heat-No-Settings")
+.IsDependentOn("Nuget-Restore")
+.Does(() =>
+{
+    var harvestFiles =  Directory("./");
+    var filePath = File("cake.wxs");
+    WiXHeat(harvestFiles, filePath);
 });
 
 Task("WiX-File")
 .IsDependentOn("Nuget-Restore")
 .Does(() =>
 {
-    var harvestFile = File("../website/src/website/bin/website.dll");
+    var harvestFile = File("./tools/Cake/Cake.Core.dll");
     var filePath = File("Wix.File.wxs");
-    var settings = new HeatSettings { HarvestType = WiXHarvestType.File };
-    var harvestFiles = GetFiles("../website/src/website/bin/website.dll");
-    WiXHeat(harvestFiles, filePath, settings);
+    //WiXHeat(harvestFile, filePath, WiXHarvestType.File);
+});
+
+Task("WiX-Files")
+.IsDependentOn("Nuget-Restore")
+.Does(() =>
+{
+    var filePath = File("Wix.Files.wxs");
+    var harvestFiles = GetFiles("./tools/Cake/*.dll");
+    //WiXHeat(harvestFiles, filePath, WiXHarvestType.File);
+});
+
+Task("WiX-Website")
+.Does(() =>
+{
+    var filePath = File("WiX.Website.wxs");
+    //WiXHeat("Default Web Site", filePath, WiXHarvestType.Website,  new HeatSettings { NoLogo = true });
 });
 
 Task("Default")
 .IsDependentOn("Nuget-Restore")
-.IsDependentOn("Text-Transform");
+.IsDependentOn("Text-Transform")
+.IsDependentOn("WiX-Heat-No-Settings");
 
 RunTarget(target);
