@@ -22,7 +22,8 @@ https://cakebuild.net
 [CmdletBinding()]
 Param(
     [string]$Target = "Execute",
-    [int]$ApplicationTarget = 2,
+    [ValidateSet("iOS", "Android", "UWP")]
+    [string]$ApplicationTarget = "Android",
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
     [string]$Verbosity = "Verbose",
@@ -31,7 +32,7 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.26.0"
+$CakeVersion = "0.30.0"
 $DotNetChannel = "preview";
 $DotNetVersion = "2.1.101";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
